@@ -2,7 +2,7 @@ import { faBan, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import useFetch from '../../hooks/useFetch';
 
@@ -10,6 +10,7 @@ const MyDatabase = () => {
     const { user } = useContext(AuthContext);
     const [list, setList] = useState([]);
     const { data, loading, error } = useFetch(`managerdb/user/${user.username}`);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setList(data.info);
@@ -24,6 +25,10 @@ const MyDatabase = () => {
         }
     };
     const handleClick = (id) => {};
+
+    const handleMove = (name, id) => {
+        navigate('/detail-table', { state: { name, id } });
+    };
     return (
         <div className="container">
             <div className="row">
@@ -38,6 +43,7 @@ const MyDatabase = () => {
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Name Database</th>
+                                        <th scope="col">Manager</th>
                                         <th scope="col">Edit / Delete</th>
                                     </tr>
                                 </thead>
@@ -47,13 +53,14 @@ const MyDatabase = () => {
                                             <td>{item.id}</td>
                                             <td>{item.name}</td>
                                             <td>
+                                                <button onClick={() => handleMove(item.name, item.id)}>Details</button>
+                                            </td>
+                                            <td>
                                                 <ul className="list-inline m-0">
                                                     <li className="list-inline-item">
-                                                        <Link to={'/detail-table'}>
-                                                            <button className="btn btn-success btn-sm rounded-0">
-                                                                <FontAwesomeIcon icon={faEdit} />
-                                                            </button>
-                                                        </Link>
+                                                        <button className="btn btn-success btn-sm rounded-0">
+                                                            <FontAwesomeIcon icon={faEdit} />
+                                                        </button>
                                                     </li>
                                                     <li className="list-inline-item">
                                                         <button

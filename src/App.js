@@ -13,8 +13,10 @@ import { AuthContext } from './context/AuthContext';
 import Login from './Pages/Login/Login';
 
 import MyDatabase from './Components/database/MyDatabase';
+import CreateDatabase from './Components/database/CreateDatabase';
 import CreateTable from './Components/table/CreateTable';
 import DetailTable from './Components/table/DetailTable';
+import DetailTypeTable from './Components/table/DetailTypeTable';
 
 const App = () => {
     return (
@@ -34,7 +36,9 @@ const App = () => {
 
                             <Nav className="justify-content-end">
                                 <Nav>
-                                    <Link className="nav-link">Tạo Database</Link>
+                                    <Link to={'/create-database'} className="nav-link">
+                                        Tạo Database
+                                    </Link>
                                 </Nav>
 
                                 <Nav>
@@ -59,10 +63,12 @@ const App = () => {
                             <div className="wrapper">
                                 <Routes>
                                     <Route path="/database-list" element={<MyDatabase />} />
+                                    <Route path="/create-database" element={<CreateDatabase />} />
                                     {/* <Route path="/edit-student/:id" component={EditStudent} />
                                     <Route path="/student-list" component={StudentList} /> */}
                                     <Route path="/create-table" element={<CreateTable />} />
                                     <Route path="/detail-table" element={<DetailTable />} />
+                                    <Route path="/detail-type-table" element={<DetailTypeTable />} />
                                 </Routes>
                             </div>
                         </Col>

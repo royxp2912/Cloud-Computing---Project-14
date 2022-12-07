@@ -7,14 +7,15 @@ const CreateDatabase = () => {
     const { user } = useContext(AuthContext);
     const [info, setInfo] = useState();
 
-    const userName = user.username;
+    const username = user.username;
     const handleChange = (e) => {
         setInfo(e.target.value);
     };
     const handleCreate = async (e) => {
+        const name = info;
         try {
             e.preventDefault();
-            await axios.post('managerdb', { info, userName });
+            await axios.post('managerdb/create', { name, username });
             alert('Tạo Database thành công');
         } catch (err) {
             alert('Tạo Database không thành công');

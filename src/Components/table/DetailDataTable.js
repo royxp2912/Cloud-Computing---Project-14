@@ -1,55 +1,78 @@
 import { faBan, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 
 const DetailDataTable = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const name = location.state.name;
-    const id = location.state.id;
-    const { data, loading, error } = useFetch(`managertable/read/table/${id}`);
-    const handleMoveType = (n, i, nt) => {
-        navigate('/detail-data-table', { state: { n, i, nt } });
+    const id = location.state.i;
+    const [list, setList] = useState([]);
+    const { data, loading, error } = useFetch(`managertable/read/data/${id}`);
+    const handleMoveEdit = (it) => {
+        navigate('/edit-data-table', { state: { id, it } });
     };
-    const handleMoveData = (i, n) => {};
+    const handleMoveCreate = () => {
+        navigate('/create-data-table', { state: { id } });
+    };
+    const name_column = data.infoColumn?.map((item) => {
+        return item.name_column;
+    });
+    useEffect(() => {
+        setList(data.infoData);
+    }, [data.infoData]);
+
+    const handleDel = async (itd) => {
+        try {
+            await axios.delete(`managertable/delete/data/${id}/${itd}`);
+            setList(list.filter((item) => item.id !== itd));
+            alert('Xóa Data thành công');
+        } catch (err) {
+            alert(err);
+        }
+    };
+    // list?.map((x, i) => console.log(x[i]));
     return (
         <div>
             <div className="table-responsive">
                 <table id="myTable" className="table table-bordered table-striped model-list">
                     <thead style={{ textAlign: 'center' }}>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name Table</th>
-                            <th scope="col">Manager</th>
-                            <th scope="col">Edit / Delete</th>
+                            {data.infoColumn?.map((item) => (
+                                <>
+                                    <th scope="col" key={item.id_column}>
+                                        {item.name_column}
+                                    </th>
+                                </>
+                            ))}
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody style={{ textAlign: 'center' }}>
-                        {data.info?.map((item) => (
-                            <tr key={item.id_table}>
-                                <td>{item.id_table}</td>
-                                <td>{item.name_table}</td>
-                                <td>
-                                    <button onClick={() => handleMoveType(name, item.id_table, item.name_table)}>
-                                        Detail
-                                    </button>
-                                </td>
+                        {list?.map((item) => (
+                            <tr key={item.id}>
+                                {name_column?.map((name_columb, i) => (
+                                    <td key={i}>{item[`${name_columb}`]}</td>
+                                ))}
                                 <td>
                                     <div>
                                         <ul className="list-inline m-0">
                                             <li className="list-inline-item">
                                                 <button
                                                     className="btn btn-success btn-sm rounded-0"
-                                                    onClick={() => handleMoveData(item.id_table, item.name_table)}
+                                                    onClick={() => handleMoveEdit(item.id)}
                                                 >
-                                                    Show Data
+                                                    Edit
                                                     <FontAwesomeIcon icon={faEdit} />
                                                 </button>
                                             </li>
                                             <li className="list-inline-item">
-                                                <button className="btn btn-danger btn-sm rounded-1">
+                                                <button
+                                                    className="btn btn-danger btn-sm rounded-1"
+                                                    onClick={() => handleDel(item.id)}
+                                                >
                                                     Delete
                                                     <FontAwesomeIcon icon={faBan} />
                                                 </button>
@@ -72,11 +95,9 @@ const DetailDataTable = () => {
                             marginLeft: '30px',
                         }}
                         type="button"
-                        value="Add Table"
+                        value="Add Row"
+                        onClick={handleMoveCreate}
                     />
-                </div>
-                <div className="col-sm-3">
-                    <button className="btn btn-primary btn-outline-primary">Submit</button>
                 </div>
             </div>
         </div>

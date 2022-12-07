@@ -23,14 +23,11 @@ const Login = () => {
         dispatch({ type: 'LOGIN_START' });
         try {
             const res = await axios.post('auth/login', credentials);
-            if (res.data) {
-                dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
-                navigate('/database-list');
-            } else {
-                dispatch({ type: 'LOGIN_FAILURE', payload: { message: 'Sai mật khẩu hoặc tài khoản' } });
-            }
+
+            dispatch({ type: 'LOGIN_SUCCESS', payload: res.data });
+            navigate('/database-list');
         } catch (err) {
-            dispatch({ type: 'LOGIN_FAILURE', payload: err.response });
+            dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data });
         }
     };
 

@@ -5,10 +5,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
 
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import CreateStudent from './Components/create-student';
-import EditStudent from './Components/edit-student';
-import StudentList from './Components/student-list';
 import { AuthContext } from './context/AuthContext';
 import Login from './Pages/Login/Login';
 
@@ -17,8 +15,21 @@ import CreateDatabase from './Components/database/CreateDatabase';
 import CreateTable from './Components/table/CreateTable';
 import DetailTable from './Components/table/DetailTable';
 import DetailTypeTable from './Components/table/DetailTypeTable';
+import DetailDataTable from './Components/table/DetailDataTable';
+import EditDataTable from './Components/table/EditDataTable';
 
 const App = () => {
+    const { dispatch } = useContext(AuthContext);
+    const handleClick = async (e) => {
+        e.preventDefault();
+        dispatch({ type: 'LOGIN_START' });
+        try {
+            dispatch({ type: 'LOGOUT' });
+            localStorage.clear();
+        } catch (err) {
+            dispatch({ type: 'LOGIN_FAILURE', payload: err.response.data });
+        }
+    };
     return (
         <Router>
             <div className="App">
@@ -47,9 +58,9 @@ const App = () => {
                                     </Link>
                                 </Nav>
 
-                                <Nav>
-                                    <Link to={'/create-table'} className="nav-link">
-                                        Create Table
+                                <Nav onClick={handleClick}>
+                                    <Link to={'/'} className="nav-link">
+                                        Logout
                                     </Link>
                                 </Nav>
                             </Nav>
@@ -69,6 +80,9 @@ const App = () => {
                                     <Route path="/create-table" element={<CreateTable />} />
                                     <Route path="/detail-table" element={<DetailTable />} />
                                     <Route path="/detail-type-table" element={<DetailTypeTable />} />
+                                    <Route path="/detail-data-table" element={<DetailDataTable />} />
+                                    <Route path="/edit-data-table" element={<EditDataTable type="edit" />} />
+                                    <Route path="/create-data-table" element={<EditDataTable type="create" />} />
                                 </Routes>
                             </div>
                         </Col>

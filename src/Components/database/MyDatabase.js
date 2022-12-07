@@ -20,6 +20,7 @@ const MyDatabase = () => {
         try {
             await axios.delete(`managerdb/delete/${id}`);
             setList(list.filter((item) => item.id !== id));
+            alert('Xóa thành công');
         } catch (err) {
             alert('Không xóa được');
         }
@@ -44,7 +45,7 @@ const MyDatabase = () => {
                                         <th scope="col">#</th>
                                         <th scope="col">Name Database</th>
                                         <th scope="col">Manager</th>
-                                        <th scope="col">Edit / Delete</th>
+                                        <th scope="col">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody className="customtable">
@@ -57,11 +58,6 @@ const MyDatabase = () => {
                                             </td>
                                             <td>
                                                 <ul className="list-inline m-0">
-                                                    <li className="list-inline-item">
-                                                        <button className="btn btn-success btn-sm rounded-0">
-                                                            <FontAwesomeIcon icon={faEdit} />
-                                                        </button>
-                                                    </li>
                                                     <li className="list-inline-item">
                                                         <button
                                                             className="btn btn-sm btn-danger mt-0"

@@ -19,13 +19,17 @@ const DetailTable = () => {
     const handleMoveType = (n, i, nt) => {
         navigate('/detail-type-table', { state: { n, i, nt } });
     };
-    const handleMoveData = (i, n) => {};
+    const handleMoveData = (i, n) => {
+        navigate('/detail-data-table', { state: { i, n } });
+    };
 
     const handleDel = async (i) => {
         try {
             await axios.delete(`managertable/delete/table/${i}`);
+            setList(list.filter((item) => item.id !== i));
+            alert('Xóa Table thành công');
         } catch (err) {
-            alert('Xóa không thành công');
+            alert('Xóa Table không thành công');
         }
     };
     return (
@@ -78,20 +82,6 @@ const DetailTable = () => {
                         ))}
                     </tbody>
                 </table>
-            </div>
-            <div className="form-group row pb-5">
-                <div className="col-sm-9">
-                    <input
-                        style={{
-                            position: 'relative',
-                            backgroundColor: '#008CBA',
-                            marginTop: '0px',
-                            marginLeft: '30px',
-                        }}
-                        type="button"
-                        value="Add Table"
-                    />
-                </div>
             </div>
         </div>
     );

@@ -1,0 +1,16 @@
+service: aws-lambda
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  memorySize: 512
+  timeout: 30
+  stage: api
+  region: us-east-1
+
+functions:
+  api:
+    handler: lambda.handeler
+    events:
+      - http: ANY /{proxy+}
+      - http: ANY /
